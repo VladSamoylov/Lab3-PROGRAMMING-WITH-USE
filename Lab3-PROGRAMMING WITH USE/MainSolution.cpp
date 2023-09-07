@@ -9,7 +9,7 @@ using namespace std;
  * @param i Значення типу int введене з клавіатури
  * @return Повертає коректне значення для подальшої роботи системи
 */
-int CheckIntValue(int i) {
+int CheckIntValue(int* i) {
 
 	cin.ignore(666, '\n');
 	while (true) {
@@ -17,10 +17,10 @@ int CheckIntValue(int i) {
 			cin.clear();
 			cin.ignore(666, '\n');
 			cout << "You enter wrong data! Please enter correct data: \n";
-			cin >> i;
+			cin >> *i;
 		}
 		else {
-			return i;
+			return *i;
 		}
 	}
 }
@@ -30,7 +30,7 @@ int CheckIntValue(int i) {
  * @param i Значення типу float введене з клавіатури
  * @return Повертає коректне значення для подальшої роботи системи
 */
-float CheckFloatValue(float i) {
+float CheckFloatValue(float* i) {
 
 	cin.ignore(666, '\n');
 	while (true) {
@@ -38,12 +38,66 @@ float CheckFloatValue(float i) {
 			cin.clear();
 			cin.ignore(666, '\n');
 			cout << "You enter wrong data! Please enter correct data: \n";
-			cin >> i;
+			cin >> *i;
 		}
 		else {
-			return i;
+			return *i;
 		}
 	}
+}
+
+/**
+ * @brief Перевіряє мінімальну кількість елементів, який повинен мати масив
+ * @param n Кількість елементів масиву введенна користувачем з клавіатури
+ * @return Повертає коректне значення кількості елементів масиву
+*/
+int CheckMinMembersOfMassive(int* n) {
+
+	if (*n < 0) {
+		cout << "You enter wrong data! Please enter correct data (min members - 0): \n";
+		cin >> *n;
+		*n = CheckIntValue(&*n);
+	}
+	return *n;
+}
+
+void FillTheMassiveAandB(int* n) {
+	float* masA = new float[*n];
+	int j = 0, zero = 0;
+
+	for (int i = 0; i < *n; i++) {
+		masA[i] = 0.7 * cos(pow(i, 2)) - 3 * i;
+		if (masA[i] == 0) {
+			zero++;
+		}
+	}
+	float* masB = new float[*n - zero];
+	for (int i = 0; i < *n; i++) {
+		if (masA[i] < 0) {
+			masB[j] = masA[i];
+			j++;
+		}
+	}
+	for (int i = 0; i < *n; i++) {
+		if (masA[i] > 0) {
+			masB[j] = masA[i];
+			j++;
+		}
+	}
+	cout << "masA have " << *n << " elements: \n";
+	for (float* ptr = masA; ptr < &masA[*n]; ptr++) {
+		cout << *ptr;
+		cout <<" (" << ptr << ") /";
+	}
+	cout << endl;
+	cout << "masB have " << *n - zero << " elements: \n";
+	for (int i = 0; i < *n - zero; i++) {
+		cout << masB[i] << '/';
+	}
+	cout << endl;
+	
+	delete[] masA;
+	delete[] masB;
 }
 
 /**
@@ -51,39 +105,40 @@ float CheckFloatValue(float i) {
  * @param q Вибір виконуваного завдання, яке задається користувачем з клавіатури
  * @return Повертає саме себе для продовження роботи користувача з додатком
 */
-int MenuOfSolution(int q) {
-	int n1 = 0, n4 = 2;
+int MenuOfSolution(int* q) {
+	int n;
 
-	switch (q) {
+	switch (*q) {
 	case 1:
-		int k;
-
-		cout << "\nTask A\n";
-		cout << "Enter amount sequence members: ";
-		
+		cout << "\n__Task A__\n";
+		cout << "Enter amount members of masive A: ";
+		cin >> n;
+		n = CheckIntValue(&n);
+		n = CheckMinMembersOfMassive(&n);
+		FillTheMassiveAandB(&n);
+		break;
 	case 2:
-		char symbol;
 
-		cout << "\nTask B\n";
+		cout << "\n__Task B__\n";
 		cout << "Enter symbol to get the code of character: ";
 		
 		break;
 	case 3:
-		int n;
+		
 
-		cout << "\nTask C\n";
+		cout << "\n__Task C__\n";
 		cout << "Enter number N: ";
 		
 		break;
 	case 4:
-		int m;
+		
 
-		cout << "\nTask D\n";
+		cout << "\n__Task D__\n";
 		cout << "Enter amount sequence members: ";
 		
 		break;
 	default:
-		cout << "\nYou don't enter any task for execution\n";
+		cout << "\n__You don't enter any task for execution__\n";
 		return 0;
 	}
 	return MenuOfSolution(q);
@@ -101,8 +156,8 @@ int main() {
 	cout << "Task G) Amount Sequence Members - Enter 4\n";
 	cout << "------------------------------------------------------------\n";
 	cin >> q;
-	q = CheckIntValue(q);
-	MenuOfSolution(q);
+	q = CheckIntValue(&q);
+	MenuOfSolution(&q);
 
 	return main();
 }
