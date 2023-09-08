@@ -60,6 +60,13 @@ int CheckMinMembersOfMassive(int* n) {
 	return *n;
 }
 
+/**
+ * @brief Перевіряє мінімальний і максимальний розмір матриці
+ * @param n Кількість рядків
+ * @param m Кількість стовпців
+ * @param max Максимальна кількість рядків і стовпців в матриці
+ * @return 
+*/
 pair<int,int> CheckMinMaxMembersOfMatrix(int* n, int* m, int max) {
 
 	if (*n <= 0) {
@@ -128,6 +135,12 @@ void FillTheMassiveAandB(int* n) {
 	delete[] masB;
 }
 
+/**
+ * @brief Очищає дані масиву і встановлює кожному елементу масиву значення -1
+ * @param mas Масив, який потрібно очистити
+ * @param n Розмір масиву	
+ * @param d Лічильник
+*/
 void ClearMassive(int *mas, int n, int* d) {
 	
 	*d = 0;
@@ -136,6 +149,13 @@ void ClearMassive(int *mas, int n, int* d) {
 	}
 }
 
+/**
+ * @brief Додає елементи до масиву, для збереження інформації завдання В
+ * @param mas Масив, якому потрібно присвоїти значення
+ * @param target Елемент, якому присвоюється значення
+ * @param value Значення для присвоєння елементу масиву
+ * @param n_team Номер команди
+*/
 void AddElementMassiveForTaskB(int* mas, int* target, int* value, int n_team) {
 
 	mas[*target] = *value;
@@ -144,10 +164,16 @@ void AddElementMassiveForTaskB(int* mas, int* target, int* value, int n_team) {
 	*target += 1;
 }
 
+/**
+ * @brief Шукає команду, яка зайняла друге місце та створяє турнірну таблицю
+ * @param n Кількість рядків матриці-таблиці
+ * @param m Кількість стовпців матриці -таблиці
+*/
 void FindTeamGetSecondPlace(int* n, int* m) {
 	int** matrix_table = new int*[*n];
-	int rnd_number, k = 1, team_number = 65, buffer = 0, second_place = 0;
+	int rnd_number, k = 1, team_number = 65, buffer = 0;
 	int* record = new int[*n];
+	int winner_save[26], second_place_save[26], i_save = 0, j_save = 0;
 
 	for (int i = 0; i < *n; i++) {
 		matrix_table[i] = new int[*m];
@@ -202,9 +228,8 @@ void FindTeamGetSecondPlace(int* n, int* m) {
 		cout << endl;
 	}
 	buffer = 0;
-	int winner_save[26], second_place_save[26], i_save = 0, j_save = 0;
 	for (int* ptr = record; ptr < &record[*n]; ptr++) {
-		cout << *ptr << endl;
+		//cout << *ptr << endl;
 		if (*ptr > buffer) {
 			buffer = *ptr;			
 			ClearMassive(second_place_save, 26, &j_save);
@@ -214,54 +239,46 @@ void FindTeamGetSecondPlace(int* n, int* m) {
 			}
 			ClearMassive(winner_save, 26, &i_save);
 			AddElementMassiveForTaskB(winner_save, &i_save, &buffer, ptr - record);
-			//winner_save[i_save] = buffer;
-			//i_save++;
-			//winner_save[i_save] = 65 + (ptr - record);
-			//i_save++;
 			
 		}
 		else if (*ptr == buffer) {
 			AddElementMassiveForTaskB(winner_save, &i_save, &buffer, ptr - record);
-			//winner_save[i_save] = buffer;
-			//i_save++;
-			//winner_save[i_save] = 65 + (ptr - record);
-			//i_save++;
 		}
 		if (*ptr < buffer && *ptr > second_place_save[0]) {
 			ClearMassive(second_place_save, 26, &j_save);
 			AddElementMassiveForTaskB(second_place_save, &j_save, &*ptr, ptr - record);
-			//second_place_save[j_save] = *ptr;
-			//j_save++;
-			//second_place_save[j_save] = 65 + (ptr - record);
-			//j_save++;
-			//second_place = *ptr;
 		}
 		else if (second_place_save[0] == *ptr) {
 			AddElementMassiveForTaskB(second_place_save, &j_save, &second_place_save[0], ptr - record);
-			//second_place_save[j_save] = second_place_save[0];
-			//j_save++;
-			//second_place_save[j_save] = 65 + (ptr - record);
-			//j_save++;
 		}
 	}
 	if (winner_save[2] >= 0) {
-		cout << "first place: \n";
-		for (int i = 0; i < 26; i++) {			
-			cout << winner_save[i] << '/';
+		cout << "The second place goes to the teams ";
+		for (int i = 1; i < 26; i +=2) {
+			if (winner_save[i] >= 0) {
+				cout << " or " << char(winner_save[i]);
+			}
 		}
+		cout << " with: " << winner_save[0] << " points \n";
 		cout << endl;
 	}
 	else if (second_place_save[2] >= 0) {
-		cout << "second place: \n";
-		for (int* ptr = second_place_save; ptr < &second_place_save[26]; ptr++) {
-			cout << *ptr << '/';
+		cout << "The second place goes to the teams ";
+		for (int* ptr = second_place_save + 1; ptr < &second_place_save[26]; ptr += 2) {
+			if (*ptr >= 0) {
+				cout << " or " << char(*ptr);
+			}
 		}
+		cout << " with: " << second_place_save[0] << " points \n";
 		cout << endl;
 	}
 	else {
 		cout << "The second place goes to the team " << char(second_place_save[1]) << " with: " << second_place_save[0] << " points \n";
 	}
-	
+	for (int i = 0; i < *n; i++) {
+		delete[] matrix_table[i];
+	}
+	delete[] matrix_table;
 }
 
 /**
