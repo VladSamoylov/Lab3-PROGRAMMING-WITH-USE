@@ -316,6 +316,56 @@ void CalculateAmountOfAbsNegativeElements(int* n, int* m) {
 		cout << endl;
 	}
 	cout << "Amount of abs negative non pair elements: " << amount;
+	for (int i = 0; i < *n; i++) {
+		delete[] matrix_b[i];
+	}
+	delete[] matrix_b;
+}
+
+/**
+ * @brief Обчислює суму попарних добутків відповідних елементів, розташованих на головних діагоналях двох матриць
+ * @param n Кількість рядків матриці
+ * @param m Кількість стовпців матриць
+*/
+void CalculateAmountOfPairMainElements(int* n, int* m) {
+	int** matrix_a = new int* [*n];
+	int** matrix_b = new int* [*n];
+	int amount = 0;
+
+	for (int i = 0; i < *n; i++) {
+		matrix_a[i] = new int[*m];
+		matrix_b[i] = new int[*m];
+	}
+	for (int i = 0; i < *n; i++) {
+		for (int j = 0; j < *m; j++) {
+			matrix_a[i][j] = rand() % 10;
+			matrix_b[i][j] = rand() % 10;
+			if (i == j) {
+				amount += matrix_a[i][j] * matrix_b[i][j];
+			}
+		}
+	}
+	cout << "matrix A: \n";
+	for (int i = 0; i < *n; i++) {
+		for (int j = 0; j < *m; j++) {
+			cout << matrix_a[i][j] << '|';
+		}
+		cout << endl;
+	}
+	cout << "matrix B: \n";
+	for (int i = 0; i < *n; i++) {
+		for (int j = 0; j < *m; j++) {
+			cout << matrix_b[i][j] << '|';
+		}
+		cout << endl;
+	}
+	cout << "Amount of pair main elements: " << amount;
+	for (int i = 0; i < *n; i++) {
+		delete[] matrix_a[i];
+		delete[] matrix_b[i];
+	}
+	delete[] matrix_a;
+	delete[] matrix_b;
 }
 
 /**
@@ -361,11 +411,15 @@ int MenuOfSolution(int* q) {
 		CalculateAmountOfAbsNegativeElements(&n, &m);
 		break;
 	case 4:
-		
-
 		cout << "\n__Task D__\n";
-		cout << "Enter amount sequence members: ";
-		
+		cout << "Enter number of colums: ";
+		cin >> n;
+		n = CheckIntValue(&n);
+		m = n;
+		matrix_size = CheckMinMaxMembersOfMatrix(&n, &m, 30);
+		n = matrix_size.first;
+		m = n;
+		CalculateAmountOfPairMainElements(&n, &m);
 		break;
 	default:
 		cout << "\n__You don't enter any task for execution__\n";
