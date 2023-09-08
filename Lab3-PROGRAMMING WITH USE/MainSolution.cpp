@@ -174,6 +174,7 @@ void FindTeamGetSecondPlace(int* n, int* m) {
 	int rnd_number, k = 1, team_number = 65, buffer = 0;
 	int* record = new int[*n];
 	int winner_save[26], second_place_save[26], i_save = 0, j_save = 0;
+	second_place_save[0] = 0;
 
 	for (int i = 0; i < *n; i++) {
 		matrix_table[i] = new int[*m];
@@ -282,6 +283,42 @@ void FindTeamGetSecondPlace(int* n, int* m) {
 }
 
 /**
+ * @brief Обчислює суму модулів від'ємних непарних елементів матриці;
+ * @param n Кількість рядків матриці
+ * @param m Кількість стовпців матриці
+*/
+void CalculateAmountOfAbsNegativeElements(int* n, int* m) {
+	int** matrix_b = new int*[*n];
+	int amount = 0;
+
+	for (int i = 0; i < *n; i++) {
+		matrix_b[i] = new int[*m];
+	}
+	for (int i = 0; i < *n; i++) {
+		for (int j = 0; j < *m; j++) {
+			matrix_b[i][j] = rand() % (25 - (-25) + 1) + (-25);
+			if (matrix_b[i][j] % 2 != 0 && matrix_b[i][j] < 0) {
+				amount += abs(matrix_b[i][j]);
+			}
+			if (matrix_b[i][j] < 10 && matrix_b[i][j] >= 0) {
+				cout << "  " << matrix_b[i][j] << "|";
+			}
+			else if (matrix_b[i][j] >= 10) {
+				cout << " " << matrix_b[i][j] << "|";
+			}
+			else if (matrix_b[i][j] < 0 && matrix_b[i][j] > -10) {
+				cout << " " << matrix_b[i][j] << "|";
+			}
+			else {
+				cout << matrix_b[i][j] << "|";
+			}
+		}
+		cout << endl;
+	}
+	cout << "Amount of abs negative non pair elements: " << amount;
+}
+
+/**
  * @brief Інтерфейс який дає змогу користувачу працювати з додатком
  * @param q Вибір виконуваного завдання, яке задається користувачем з клавіатури
  * @return Повертає саме себе для продовження роботи користувача з додатком
@@ -311,11 +348,17 @@ int MenuOfSolution(int* q) {
 		FindTeamGetSecondPlace(&n, &m);		
 		break;
 	case 3:
-		
-
 		cout << "\n__Task C__\n";
-		cout << "Enter number N: ";
-		
+		cout << "Enter number of colums: ";
+		cin >> n;
+		n = CheckIntValue(&n);
+		cout << "\nEnter number of rows: ";
+		cin >> m;
+		m = CheckIntValue(&m);
+		matrix_size = CheckMinMaxMembersOfMatrix(&n, &m, 30);
+		n = matrix_size.first;
+		m = matrix_size.second;
+		CalculateAmountOfAbsNegativeElements(&n, &m);
 		break;
 	case 4:
 		
@@ -337,9 +380,9 @@ int main() {
 	cout << "\nCreated by Vladislav Samoilov / KNT - 223\n";
 
 	cout << "--------Select task:--------\n";
-	cout << "Task A) Calculate Min Of Odd Ones and Max of Pairs - Enter 1\n";
-	cout << "Task B) Output response cod of symbol - Enter 2\n";
-	cout << "Task C) Output 5 simple numbers bigger then user enter - Enter 3\n";
+	cout << "Task A) Fill masive A and created masive B - Enter 1\n";
+	cout << "Task B) Find the team goes second place - Enter 2\n";
+	cout << "Task C) Calculate Amount Of Abs Negative Elements - Enter 3\n";
 	cout << "Task G) Amount Sequence Members - Enter 4\n";
 	cout << "------------------------------------------------------------\n";
 	cin >> q;
