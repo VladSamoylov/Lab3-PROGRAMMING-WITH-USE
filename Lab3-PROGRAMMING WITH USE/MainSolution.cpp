@@ -280,6 +280,7 @@ void FindTeamGetSecondPlace(int* n, int* m) {
 		delete[] matrix_table[i];
 	}
 	delete[] matrix_table;
+	delete[] record;
 }
 
 /**
