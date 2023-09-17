@@ -69,12 +69,12 @@ int CheckMinMembersOfMassive(int* n) {
 */
 pair<int,int> CheckMinMaxMembersOfMatrix(int* n, int* m, int max) {
 
-	if (*n <= 0) {
+	if (*n <= 2) {
 		cout << "You enter wrong data! Please enter rows (min members - 2): \n";
 		cin >> *n;
 		*n = CheckIntValue(&*n);
 	}
-	if (*m <= 0) {
+	if (*m <= 2) {
 		cout << "You enter wrong data! Please enter colums (min members - 2): \n";
 		cin >> *m;
 		*m = CheckIntValue(&*m);
@@ -372,7 +372,7 @@ void CalculateAmountOfPairMainElements(int* n, int* m) {
 /**
  * @brief Інтерфейс який дає змогу користувачу працювати з додатком
  * @param q Вибір виконуваного завдання, яке задається користувачем з клавіатури
- * @return Повертає саме себе для продовження роботи користувача з додатком
+ * @return Повертає сама себе для продовження роботи користувача з додатком
 */
 int MenuOfSolution(int* q) {
 	int n, m;
@@ -438,7 +438,7 @@ int main() {
 	cout << "Task A) Fill masive A and created masive B - Enter 1\n";
 	cout << "Task B) Find the team goes second place - Enter 2\n";
 	cout << "Task C) Calculate Amount Of Abs Negative Elements - Enter 3\n";
-	cout << "Task G) Amount Sequence Members - Enter 4\n";
+	cout << "Task D) Amount Sequence Members - Enter 4\n";
 	cout << "------------------------------------------------------------\n";
 	cin >> q;
 	q = CheckIntValue(&q);
